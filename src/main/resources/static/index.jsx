@@ -1,15 +1,9 @@
-require("./node_modules/bootstrap/dist/css/bootstrap.min.css")
-import React from 'react';
-import ReactDOM from 'react-dom';
+const React = require('react');
+const ReactDOM = require('react-dom');
+import App from './components/App';
 
-export class App extends React.Component {
-	render() {
-		return (
-			<div>
-				<h1>React</h1>
-			</div>
-		);
-	}
-}
 
-ReactDOM.render(<App/>, document.querySelector("#app"));
+ReactDOM.render(
+    <App />,
+    document.getElementById('app')
+);

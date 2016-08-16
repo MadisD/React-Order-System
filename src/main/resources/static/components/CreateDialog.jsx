@@ -14,20 +14,15 @@ export default class CreateDialog extends React.Component {
         this.props.attributes.forEach(attribute => {
             newClient[attribute] = ReactDOM.findDOMNode(this.refs[attribute]).value.trim();
         });
+
         this.props.onCreate(newClient);
 
-        $('#myModal').hide();
-        // clear out the dialog's inputs
         this.props.attributes.forEach(attribute => {
             ReactDOM.findDOMNode(this.refs[attribute]).value = '';
         });
 
         // Navigate away from the dialog to hide it.
-        $('.modal-backdrop').click();
-    }
-
-    removeModal(){
-        $('#myModal').hide();
+        $("#myModal").modal("hide");
     }
 
     render() {
@@ -54,8 +49,6 @@ export default class CreateDialog extends React.Component {
                                 <form>
                                     {inputs}
                                     <button onClick={this.handleSubmit}>Create</button>
-                                    <button onClick={this.removeModal}>Remove</button>
-
                                 </form>
                             </div>
                         </div>
@@ -65,5 +58,4 @@ export default class CreateDialog extends React.Component {
             </div>
         )
     }
-
 }

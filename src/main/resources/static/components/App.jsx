@@ -1,6 +1,7 @@
+const _ = require('lodash');
+const mime = require('rest/interceptor/mime');
 const React = require('react');
 const rest = require('rest');
-const mime = require('rest/interceptor/mime');
 const clientAPI = rest.wrap(mime);
 
 import ClientList from './ClientList';
@@ -12,11 +13,13 @@ export default class App extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {clients: [], attributes: []};
-        // this.updatePageSize = this.updatePageSize.bind(this);
+        this.state = {
+            attributes: [],
+            clients: []
+        };
         this.onCreate = this.onCreate.bind(this);
-        // this.onDelete = this.onDelete.bind(this);
-        // this.onNavigate = this.onNavigate.bind(this);
+        this.onDelete = this.onDelete.bind(this);
+        this.onEdit = this.onEdit.bind(this);
     }
 
     loadFromServer() {
@@ -43,50 +46,6 @@ export default class App extends React.Component {
         });
     }
 
-    //     follow(clientAPI, root, [
-    //         {rel: 'clients', params: {size: pageSize}}]
-    //     ).then(clientCollection => {
-    //         return clientAPI({
-    //             method: 'GET',
-    //             path: root,
-    //             headers: {'Accept': 'application/schema+json'}
-    //         }).then(schema => {
-    //             this.schema = schema.entity;
-    //             this.schema = schema.entity;
-    //             return clientCollection;
-    //         });
-    //     }).then(clientCollection => {
-    //         this.setState({
-    //             clients: clientCollection.entity._embedded.clients,
-    //             attributes: Object.keys(this.schema.properties),
-    //             pageSize: pageSize,
-    //             links: clientCollection.entity._links});
-    //         console.log(clientCollection.entity._links);
-    //     });
-    // }
-    // onDelete(client) {
-    //     clientAPI({method: 'DELETE', path: client._links.self.href}).then(response => {
-    //         this.loadFromServer(this.state.pageSize);
-    //     });
-    // }
-    //
-    // updatePageSize(pageSize) {
-    //     if (pageSize !== this.state.pageSize) {
-    //         this.loadFromServer(pageSize);
-    //     }
-    // }
-    //
-    // onNavigate(navUri) {
-    //     clientAPI({method: 'GET', path: navUri}).then(clientCollection => {
-    //         this.setState({
-    //             clients: clientCollection.entity._embedded.clients,
-    //             attributes: this.state.attributes,
-    //             pageSize: this.state.pageSize,
-    //             links: clientCollection.entity._links
-    //         });
-    //     });
-    // }
-    //
     onCreate(newClient) {
         clientAPI({
             method: 'POST',
@@ -94,14 +53,46 @@ export default class App extends React.Component {
             entity: newClient,
             headers: {'Content-Type': 'application/json'}
         }).then(response => {
-            this.state.clients.push(newClient);
+            if (response.status.code == 201) {
+                this.state.clients.push(response.entity);
+                this.setState({
+                    clients: this.state.clients
+                })
+            }
+        });
+    }
+
+    onDelete(client) {
+        clientAPI({
+            method: 'DELETE',
+            path: client._links.self.href
+        }).then(response => {
+            _.remove(this.state.clients, iterClient => {
+                return iterClient._links.self.href === client._links.self.href;
+            });
+            this.setState({clients: this.state.clients});
+        });
+    }
+
+    onEdit(client){
+        const clientPath = root + 'clients/' + client.id;
+        const newInfo = _.omit(client, 'id');
+
+        clientAPI({
+            method: 'PUT',
+            path: clientPath,
+            entity: newInfo,
+            headers: {'Content-Type': 'application/json'}
+        }).then(response => {
+            const clientToChange = _.findIndex(this.state.clients, iterClient => {
+                return iterClient._links.self.href === response.entity._links.self.href;
+            });
+            this.state.clients[clientToChange] = response.entity;
+            this.setState({clients: this.state.clients});
         });
     }
 
     componentDidMount() {
-        // clientAPI({method: 'GET', path: 'http://localhost:8080/api/clients'}).then(response => {
-        //     this.setState({clients: response.entity._embedded.clients});
-        // });
         this.loadFromServer();
     }
 
@@ -109,7 +100,7 @@ export default class App extends React.Component {
         return (
             <div>
                 <CreateDialog attributes={this.state.attributes} onCreate={this.onCreate}/>
-                <ClientList clients={this.state.clients}/>
+                <ClientList attributes={this.state.attributes} clients={this.state.clients} onEdit={this.onEdit} onDelete={this.onDelete}/>
             </div>
         )
     }

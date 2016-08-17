@@ -1,5 +1,6 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
+import {createClient, setError} from '../actions/clientActions'
 
 export default class CreateDialog extends React.Component {
 
@@ -11,22 +12,21 @@ export default class CreateDialog extends React.Component {
     handleSubmit(e) {
         e.preventDefault();
         var newClient = {};
-        var {attributes, setError}= this.props;
+        var {attributes,dispatch}= this.props;
 
         var attribute = '';
         for (attribute of attributes) {
             const value = ReactDOM.findDOMNode(this.refs[attribute]).value.trim();
             const errorMsg = this.props.validateInput(attribute, value);
             if (errorMsg) {
-                setError(errorMsg);
+                dispatch(setError(errorMsg));
                 return;
             }
             newClient[attribute] = ReactDOM.findDOMNode(this.refs[attribute]).value.trim();
         }
 
-        setError(null);
-
-        this.props.onCreate(newClient);
+        dispatch(setError(null));
+        dispatch(createClient(newClient));
         $("#myModal").modal("hide");
     }
 
@@ -36,7 +36,6 @@ export default class CreateDialog extends React.Component {
                 <input type="text" placeholder={attribute} ref={attribute} className="field form-control"/>
             </p>
         );
-
         return (
             <div>
                 <button type="button" class="btn btn-success " data-toggle="modal" data-target="#myModal">

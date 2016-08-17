@@ -1,5 +1,6 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
+import {setError, updateClient} from '../../actions/clientActions'
 
 export default class EditDialog extends React.Component {
 
@@ -11,7 +12,7 @@ export default class EditDialog extends React.Component {
     handleSubmit(e) {
         e.preventDefault();
         var newClient = {};
-        var {client, attributes, setError}= this.props;
+        var {client, attributes, dispatch}= this.props;
         const id = client._links.self.href.split('/').pop();
         newClient['id'] = id;
 
@@ -20,15 +21,14 @@ export default class EditDialog extends React.Component {
             const value = ReactDOM.findDOMNode(this.refs[attribute]).value.trim();
             const errorMsg = this.props.validateInput(attribute, value);
             if (errorMsg) {
-                setError(errorMsg);
+                dispatch(setError(errorMsg));
                 return;
             }
             newClient[attribute] = ReactDOM.findDOMNode(this.refs[attribute]).value.trim();
         }
+        dispatch(setError(null));
+        dispatch(updateClient(newClient));
 
-        setError(null);
-
-        this.props.onEdit(newClient);
         $("#myEdit" + id).modal("hide");
     }
 

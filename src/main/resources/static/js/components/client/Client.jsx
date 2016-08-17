@@ -1,5 +1,6 @@
 const React = require('react');
 import EditDialog from './EditDialog';
+import {deleteClient} from '../../actions/clientActions'
 export default class Client extends React.Component {
     constructor(props) {
         super(props);
@@ -8,7 +9,7 @@ export default class Client extends React.Component {
     }
 
     handleDelete() {
-        this.props.onDelete(this.props.client);
+        this.props.dispatch(deleteClient(this.props.client));
     }
 
     render() {

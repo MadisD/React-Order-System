@@ -12,19 +12,19 @@ export default class Client extends React.Component {
     }
 
     render() {
+        var {client} = this.props;
         return (
             <tr>
-                {/*<td>{this.props.client.firstName}</td>*/}
-                {/*<td>{this.props.client.lastName}</td>*/}
-                {/*<td>{this.props.client.securityNr}</td>*/}
-                {/*<td>{this.props.client.phoneNr}</td>*/}
-                {/*<td>{this.props.client.country}</td>*/}
-                {/*<td>{this.props.client.address}</td>*/}
-                <td>{this.props.client.name}</td>
-                <td>{this.props.client.description}</td>
+                <td>{client.firstName}</td>
+                <td>{client.lastName}</td>
+                <td>{client.securityNr}</td>
+                <td>{client.phoneNr}</td>
+                <td>{client.country}</td>
+                <td>{client.address}</td>
                 <td>
-                    <EditDialog attributes={this.props.attributes} client={this.props.client}
-                                onEdit={this.props.onEdit}/>
+                    <EditDialog
+                        {...this.props}
+                    />
                 </td>
                 <td>
                     <button onClick={this.handleDelete}>Delete</button>

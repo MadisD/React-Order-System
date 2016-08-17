@@ -7,11 +7,9 @@ export default class ClientList extends React.Component {
         var clients = this.props.clients.map(
             client =>
                 <Client
-                    attributes={this.props.attributes}
                     key={client._links.self.href}
                     client={client}
-                    onDelete={this.props.onDelete}
-                    onEdit={this.props.onEdit}
+                    {...this.props}
                 />
         );
 
@@ -20,20 +18,19 @@ export default class ClientList extends React.Component {
                 <div>
                     <table>
                         <tbody>
-                            <tr>
-                                <th>First Name</th>
-                                <th>Description</th>
-                                <th/>
-                                <th/>
-                            </tr>
+                        <tr>
+                            <th>First name</th>
+                            <th>Last name</th>
+                            <th>Security number</th>
+                            <th>Phone number</th>
+                            <th>Country</th>
+                            <th>Address</th>
+                            <th/>
+                            <th/>
+                        </tr>
 
-                        {/*/!*<th>Last Name</th>*!/*/}
-                        {/*/!*<th>Security Number</th>*!/*/}
-                        {/*/!*<th>Phone Number</th>*!/*/}
-                        {/*/!*<th>Country</th>*!/*/}
-                        {/*/!*<th>Address</th>*!/*/}
-                        {/*</tr>*/}
-                            {clients}
+
+                        {clients}
                         </tbody>
                     </table>
                 </div>

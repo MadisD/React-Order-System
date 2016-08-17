@@ -11,21 +11,40 @@ export default class EditDialog extends React.Component {
     handleSubmit(e) {
         e.preventDefault();
         var newClient = {};
-        const {client}= this.props;
+        var {client, attributes, setError}= this.props;
         const id = client._links.self.href.split('/').pop();
         newClient['id'] = id;
 
-        this.props.attributes.forEach(attribute => {
+        var attribute = '';
+        for (attribute of attributes) {
+            const value = ReactDOM.findDOMNode(this.refs[attribute]).value.trim();
+            const errorMsg = this.props.validateInput(attribute, value);
+            if (errorMsg) {
+                setError(errorMsg);
+                return;
+            }
             newClient[attribute] = ReactDOM.findDOMNode(this.refs[attribute]).value.trim();
-        });
+        }
+
+        setError(null);
 
         this.props.onEdit(newClient);
         $("#myEdit" + id).modal("hide");
     }
 
     render() {
-        const {client}= this.props;
+        var {client, attributes}= this.props;
         const id = client._links.self.href.split('/').pop();
+
+        var inputs = attributes.map(attribute =>
+            <p key={attribute}>
+                <label htmlFor={attribute}>{attribute}</label>
+                <input id={attribute} type="text" placeholder={attribute} ref={attribute}
+                       defaultValue={client[attribute]}
+                       className="field"/>
+            </p>
+        );
+
         return (
             <div>
                 <button type="button" data-toggle="modal" data-target={"#myEdit" + id}>
@@ -40,13 +59,9 @@ export default class EditDialog extends React.Component {
                                 <h4 class="modal-title">Edit client</h4>
                             </div>
                             <div class="modal-body">
+                                {this.props.renderError()}
                                 <form>
-                                    <label htmlFor="name">Name</label>
-                                    <input id="name" type="text" placeholder="name" ref="name"
-                                           className="field" defaultValue={client.name}/>
-                                    <label htmlFor="description">Description</label>
-                                    <input id="description" type="text" placeholder="description" ref="description"
-                                           className="field" defaultValue={client.description}/>
+                                    {inputs}
                                     <button onClick={this.handleSubmit}>Save</button>
                                 </form>
                             </div>

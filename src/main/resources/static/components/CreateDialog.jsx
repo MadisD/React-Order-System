@@ -11,17 +11,22 @@ export default class CreateDialog extends React.Component {
     handleSubmit(e) {
         e.preventDefault();
         var newClient = {};
-        this.props.attributes.forEach(attribute => {
+        var {client, attributes, setError}= this.props;
+
+        var attribute = '';
+        for (attribute of attributes) {
+            const value = ReactDOM.findDOMNode(this.refs[attribute]).value.trim();
+            const errorMsg = this.props.validateInput(attribute, value);
+            if (errorMsg) {
+                setError(errorMsg);
+                return;
+            }
             newClient[attribute] = ReactDOM.findDOMNode(this.refs[attribute]).value.trim();
-        });
+        }
+
+        setError(null);
 
         this.props.onCreate(newClient);
-
-        this.props.attributes.forEach(attribute => {
-            ReactDOM.findDOMNode(this.refs[attribute]).value = '';
-        });
-
-        // Navigate away from the dialog to hide it.
         $("#myModal").modal("hide");
     }
 
@@ -46,6 +51,7 @@ export default class CreateDialog extends React.Component {
                                 <h4 class="modal-title">Create new client</h4>
                             </div>
                             <div class="modal-body">
+                                {this.props.renderError()}
                                 <form>
                                     {inputs}
                                     <button onClick={this.handleSubmit}>Create</button>

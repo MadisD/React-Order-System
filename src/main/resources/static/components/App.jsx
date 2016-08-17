@@ -15,11 +15,15 @@ export default class App extends React.Component {
         super(props);
         this.state = {
             attributes: [],
-            clients: []
+            clients: [],
+            error: null
         };
         this.onCreate = this.onCreate.bind(this);
         this.onDelete = this.onDelete.bind(this);
         this.onEdit = this.onEdit.bind(this);
+        this.validateInput = this.validateInput.bind(this);
+        this.renderError = this.renderError.bind(this);
+        this.setError = this.setError.bind(this);
     }
 
     loadFromServer() {
@@ -92,6 +96,29 @@ export default class App extends React.Component {
         });
     }
 
+    setError(error){
+        if (error) {
+            this.setState({error: error});
+        }
+        else {
+            this.setState({error: null});
+        }
+
+    }
+
+    renderError() {
+        if (!this.state.error) { return null; }
+
+        return <div style={{ color: 'red' }}>{this.state.error}</div>;
+    }
+
+    validateInput(attribute, value) {
+        if (!value) {
+            return attribute + " cant be empty";
+        }
+        return null;
+    }
+
     componentDidMount() {
         this.loadFromServer();
     }
@@ -99,8 +126,23 @@ export default class App extends React.Component {
     render() {
         return (
             <div>
-                <CreateDialog attributes={this.state.attributes} onCreate={this.onCreate}/>
-                <ClientList attributes={this.state.attributes} clients={this.state.clients} onEdit={this.onEdit} onDelete={this.onDelete}/>
+                <CreateDialog
+                    attributes={this.state.attributes}
+                    onCreate={this.onCreate}
+                    validateInput={this.validateInput}
+                    renderError={this.renderError}
+                    setError={this.setError}
+                />
+
+                <ClientList
+                    attributes={this.state.attributes}
+                    clients={this.state.clients}
+                    onEdit={this.onEdit}
+                    onDelete={this.onDelete}
+                    validateInput={this.validateInput}
+                    renderError={this.renderError}
+                    setError={this.setError}
+                />
             </div>
         )
     }

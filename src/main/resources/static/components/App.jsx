@@ -14,7 +14,7 @@ export default class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            attributes: [],
+            clientAttributes: [],
             clients: [],
             error: null
         };
@@ -41,7 +41,7 @@ export default class App extends React.Component {
             }).then(
                 schema => {
                     this.setState({
-                        attributes: Object.keys(schema.entity.properties)
+                        clientAttributes: Object.keys(schema.entity.properties)
                     });
                     return schema;
                 }
@@ -78,7 +78,7 @@ export default class App extends React.Component {
         });
     }
 
-    onEdit(client){
+    onEdit(client) {
         const clientPath = root + 'clients/' + client.id;
         const newInfo = _.omit(client, 'id');
 
@@ -96,20 +96,21 @@ export default class App extends React.Component {
         });
     }
 
-    setError(error){
+    setError(error) {
         if (error) {
             this.setState({error: error});
         }
         else {
             this.setState({error: null});
         }
-
     }
 
     renderError() {
-        if (!this.state.error) { return null; }
+        if (!this.state.error) {
+            return null;
+        }
 
-        return <div style={{ color: 'red' }}>{this.state.error}</div>;
+        return <div style={{color: 'red'}}>{this.state.error}</div>;
     }
 
     validateInput(attribute, value) {
@@ -126,19 +127,19 @@ export default class App extends React.Component {
     render() {
         return (
             <div>
-                <CreateDialog
-                    attributes={this.state.attributes}
-                    onCreate={this.onCreate}
+                <ClientList
+                    attributes={this.state.clientAttributes}
+                    clients={this.state.clients}
+                    onEdit={this.onEdit}
+                    onDelete={this.onDelete}
                     validateInput={this.validateInput}
                     renderError={this.renderError}
                     setError={this.setError}
                 />
 
-                <ClientList
-                    attributes={this.state.attributes}
-                    clients={this.state.clients}
-                    onEdit={this.onEdit}
-                    onDelete={this.onDelete}
+                <CreateDialog
+                    attributes={this.state.clientAttributes}
+                    onCreate={this.onCreate}
                     validateInput={this.validateInput}
                     renderError={this.renderError}
                     setError={this.setError}

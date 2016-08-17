@@ -11,7 +11,7 @@ export default class CreateDialog extends React.Component {
     handleSubmit(e) {
         e.preventDefault();
         var newClient = {};
-        var {client, attributes, setError}= this.props;
+        var {attributes, setError}= this.props;
 
         var attribute = '';
         for (attribute of attributes) {
@@ -32,14 +32,14 @@ export default class CreateDialog extends React.Component {
 
     render() {
         var inputs = this.props.attributes.map(attribute =>
-            <p key={attribute}>
-                <input type="text" placeholder={attribute} ref={attribute} className="field"/>
+            <p className="form-group" key={attribute}>
+                <input type="text" placeholder={attribute} ref={attribute} className="field form-control"/>
             </p>
         );
 
         return (
             <div>
-                <button type="button" class="btn btn-info " data-toggle="modal" data-target="#myModal">
+                <button type="button" class="btn btn-success " data-toggle="modal" data-target="#myModal">
                     Create new client
                 </button>
                 <div id="myModal" class="modal fade" role="dialog">
@@ -54,7 +54,7 @@ export default class CreateDialog extends React.Component {
                                 {this.props.renderError()}
                                 <form>
                                     {inputs}
-                                    <button onClick={this.handleSubmit}>Create</button>
+                                    <button className="btn btn-block btn-primary" onClick={this.handleSubmit}>Create</button>
                                 </form>
                             </div>
                         </div>

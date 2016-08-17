@@ -1,11 +1,22 @@
 package hello;
 
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+
+@Entity(name = "products")
 public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+
     private int barcode;
     private String name;
-    private double price;
+    private BigDecimal price;
     private String description;
-    private String releaseDate;
+
+    @Column(name = "release_date")
+    private Timestamp releaseDate;
 
     public int getBarcode() {
         return barcode;
@@ -23,14 +34,6 @@ public class Product {
         this.name = name;
     }
 
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -39,11 +42,19 @@ public class Product {
         this.description = description;
     }
 
-    public String getReleaseDate() {
+    public Timestamp getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(String releaseDate) {
+    public void setReleaseDate(Timestamp releaseDate) {
         this.releaseDate = releaseDate;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 }

@@ -16,7 +16,7 @@ export default class ClientList extends React.Component {
         return (
             <div>
                 <div>
-                    <table>
+                    <table className="table">
                         <tbody>
                         <tr>
                             <th>First name</th>

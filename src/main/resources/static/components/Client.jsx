@@ -27,7 +27,7 @@ export default class Client extends React.Component {
                     />
                 </td>
                 <td>
-                    <button onClick={this.handleDelete}>Delete</button>
+                    <button className="btn btn-sm btn-secondary" onClick={this.handleDelete}>Delete</button>
                 </td>
             </tr>
         );

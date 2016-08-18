@@ -6,7 +6,7 @@ import javax.persistence.*;
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private long client_id;
 
     @Column(name = "security_nr")
     private long securityNr;
@@ -25,12 +25,12 @@ public class Client {
     private String address;
 
 
-    public long getId() {
-        return id;
+    public long getClient_id() {
+        return client_id;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setClient_id(long client_id) {
+        this.client_id = client_id;
     }
 
     public long getSecurityNr() {

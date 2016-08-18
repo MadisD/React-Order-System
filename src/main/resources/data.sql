@@ -15,3 +15,5 @@ INSERT INTO products (name, barcode, price, description, release_date) VALUES
   ('product6', 6666, 200, 'out now', CURRENT_TIMESTAMP()),
   ('product7', 7777, 44.44, 'cheap', CURRENT_TIMESTAMP()),
   ('product8', 8888, 90.80, 'super price', CURRENT_TIMESTAMP());
+
+INSERT INTO orders (product_price, transaction_date, client_id, product_id) values (111, CURRENT_TIMESTAMP(), 1, 1);

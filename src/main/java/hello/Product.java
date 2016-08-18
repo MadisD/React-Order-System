@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private long product_id;
 
     private int barcode;
     private String name;
@@ -56,5 +56,13 @@ public class Product {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public long getProduct_id() {
+        return product_id;
+    }
+
+    public void setProduct_id(long product_id) {
+        this.product_id = product_id;
     }
 }

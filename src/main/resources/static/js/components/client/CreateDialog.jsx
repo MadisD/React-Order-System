@@ -1,6 +1,6 @@
-const React = require('react');
-const ReactDOM = require('react-dom');
-import {createClient, setError} from '../actions/clientActions'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {createClient, setError} from '../../actions/clientActions'
 
 export default class CreateDialog extends React.Component {
 

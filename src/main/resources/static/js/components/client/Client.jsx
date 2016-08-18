@@ -1,5 +1,5 @@
 const React = require('react');
-import EditDialog from './EditDialog';
+import EditClient from './EditClient';
 import {deleteClient} from '../../actions/clientActions'
 export default class Client extends React.Component {
     constructor(props) {
@@ -23,7 +23,7 @@ export default class Client extends React.Component {
                 <td>{client.country}</td>
                 <td>{client.address}</td>
                 <td>
-                    <EditDialog
+                    <EditClient
                         {...this.props}
                     />
                 </td>

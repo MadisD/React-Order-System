@@ -1,17 +1,17 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import Client from './Client';
-import CreateDialog from './CreateDialog';
-import {loadClientsInfo} from '../../actions/clientActions'
+import {loadProductsInfo} from '../../actions/productActions';
+import Product from './Product';
+import CreateProduct from './CreateProduct';
 
 @connect((store) => {
     return {
-        clients: store.clients.clients,
-        attributes: store.clients.clientAttributes,
-        error: store.clients.error
+        products: store.products.products,
+        attributes: store.products.productAttributes,
+        error: store.products.error
     };
 })
-export default class ClientList extends React.Component {
+export default class ProductList extends React.Component {
 
     constructor(props) {
         super(props);
@@ -20,7 +20,7 @@ export default class ClientList extends React.Component {
     }
 
     componentWillMount() {
-        this.props.dispatch(loadClientsInfo());
+        this.props.dispatch(loadProductsInfo());
     }
 
     renderError() {
@@ -37,13 +37,13 @@ export default class ClientList extends React.Component {
         return null;
     }
 
-
     render() {
-        var clients = this.props.clients.map(
-            client =>
-                <Client
-                    key={client._links.self.href}
-                    client={client}
+
+        var products = this.props.products.map(
+            product =>
+                <Product
+                    key={product._links.self.href}
+                    product={product}
                     renderError={this.renderError}
                     validateInput={this.validateInput}
                     {...this.props}
@@ -56,28 +56,26 @@ export default class ClientList extends React.Component {
                     <table className="table">
                         <tbody>
                         <tr>
-                            <th>First name</th>
-                            <th>Last name</th>
-                            <th>Security number</th>
-                            <th>Phone number</th>
-                            <th>Country</th>
-                            <th>Address</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Barcode</th>
+                            <th>Description</th>
+                            <th>Release date</th>
                             <th/>
                             <th/>
                         </tr>
 
-
-                        {clients}
+                        {products}
                         </tbody>
                     </table>
                 </div>
-                <CreateDialog
+                <CreateProduct
                     attributes={this.props.attributes}
                     dispatch={this.props.dispatch}
                     validateInput={this.validateInput}
                     renderError={this.renderError}
                 />
             </div>
-        )
+    )
     }
-}
+    }

@@ -27,6 +27,11 @@ export default class CreateDialog extends React.Component {
 
         dispatch(setError(null));
         dispatch(createClient(newClient));
+
+        for (attribute of attributes) {
+            ReactDOM.findDOMNode(this.refs[attribute]).value = "";
+        }
+
         $("#myModal").modal("hide");
     }
 

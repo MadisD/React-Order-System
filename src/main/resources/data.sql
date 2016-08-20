@@ -7,13 +7,16 @@ INSERT INTO clients (security_nr,first_name, last_name, phone_nr, country, addre
 (31209114580, 'Dubaku','Shui', 9619918, 'United States', 'Home6');
 
 INSERT INTO products (name, barcode, price, description, release_date) VALUES
-  ('product1', 1000, 50.99, 'superb product', CURRENT_TIMESTAMP()),
-  ('product2', 1111, 100, 'okay product', CURRENT_TIMESTAMP()),
-  ('product3', 2222, 99.00, 'product', CURRENT_TIMESTAMP()),
-  ('product4', 3333, 78.99, 'superb', CURRENT_TIMESTAMP()),
-  ('product5', 5555, 30.5, '', CURRENT_TIMESTAMP()),
-  ('product6', 6666, 200, 'out now', CURRENT_TIMESTAMP()),
-  ('product7', 7777, 44.44, 'cheap', CURRENT_TIMESTAMP()),
-  ('product8', 8888, 90.80, 'super price', CURRENT_TIMESTAMP());
+  ('product1', 1000, 50.99, 'superb product', CURRENT_DATE()),
+  ('product2', 1111, 100, 'okay product', CURRENT_DATE()),
+  ('product3', 2222, 99.00, 'product', CURRENT_DATE()),
+  ('product4', 3333, 78.99, 'superb', CURRENT_DATE()),
+  ('product5', 5555, 30.5, '', CURRENT_DATE()),
+  ('product6', 6666, 200, 'out now', CURRENT_DATE()),
+  ('product7', 7777, 44.44, 'cheap', CURRENT_DATE()),
+  ('product8', 8888, 90.80, 'super price', CURRENT_DATE());
 
-INSERT INTO orders (product_price, transaction_date, client_id, product_id) values (111, CURRENT_TIMESTAMP(), 1, 1);
+INSERT INTO orders (product_price, client_id, product_id) values
+  (111, 1, 1),
+  (111, 1, 1),
+  (222, 1, 2);

@@ -26,6 +26,17 @@ export function loadProductsInfo() {
     }
 }
 
+export function fetchProducts() {
+    return (dispatch) => {
+        clientAPI({
+            method: 'GET',
+            path: root + 'products',
+        }).then(response => {
+            dispatch({type: 'LOAD_PRODUCTS_FINISHED', payload: response.entity._embedded.products});
+            });
+    }
+}
+
 export function createProduct(product) {
     return (dispatch) => {
         clientAPI({

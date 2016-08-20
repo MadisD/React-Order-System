@@ -12,7 +12,7 @@ export default class CreateDialog extends React.Component {
     handleSubmit(e) {
         e.preventDefault();
         var newProduct = {};
-        var {attributes,dispatch}= this.props;
+        var {attributes, dispatch}= this.props;
 
         var attribute = '';
         for (attribute of attributes) {
@@ -27,15 +27,29 @@ export default class CreateDialog extends React.Component {
 
         dispatch(setError(null));
         dispatch(createProduct(newProduct));
+
+        for (attribute of attributes) {
+            ReactDOM.findDOMNode(this.refs[attribute]).value = "";
+        }
+
         $("#create-product-modal").modal("hide");
     }
 
     render() {
-        var inputs = this.props.attributes.map(attribute =>
-            <p className="form-group" key={attribute}>
-                <input type="text" placeholder={attribute} ref={attribute} className="field form-control"/>
-            </p>
-        );
+        var inputs = this.props.attributes.map(attribute => {
+
+            if (attribute === 'releaseDate') {
+                return <p className="form-group" key={attribute}>
+                    <input type="date" placeholder={attribute} ref={attribute} className="field form-control"/>
+                </p>;
+            }
+            return (
+                <p className="form-group" key={attribute}>
+                    <input type="text" placeholder={attribute} ref={attribute} className="field form-control"/>
+                </p>)
+                ;
+
+        });
         return (
             <div>
                 <button type="button" class="btn btn-success " data-toggle="modal" data-target="#create-product-modal">
@@ -53,7 +67,8 @@ export default class CreateDialog extends React.Component {
                                 {this.props.renderError()}
                                 <form>
                                     {inputs}
-                                    <button className="btn btn-block btn-primary" onClick={this.handleSubmit}>Create</button>
+                                    <button className="btn btn-block btn-primary" onClick={this.handleSubmit}>Create
+                                    </button>
                                 </form>
                             </div>
                         </div>

@@ -12,74 +12,41 @@ export function loadOrdersInfo() {
             path: root + destination,
         }).then(response => {
             dispatch({type: 'LOAD_ORDERS_FINISHED', payload: response.entity._embedded.orders});
-            clientAPI({
-                method: 'GET',
-                path: response.entity._links.profile.href,
-                headers: {'Accept': 'application/schema+json'}
-            }).then(
-                schema => {
-                    dispatch({
-                        type: 'LOAD_ORDER_ATTRIBUTES_FINISHED',
-                        payload: Object.keys(schema.entity.properties)
-                    });
-                }
-            );
-
         });
     }
 }
 
-export function createOrder(order) {
+export function createOrder(productPrice, clientHref, productHref) {
     return (dispatch) => {
         clientAPI({
             method: 'POST',
-            path: root + destination,
-            entity: order,
+            path: root+ destination,
+            entity: {
+                productPrice: productPrice,
+            },
             headers: {'Content-Type': 'application/json'}
         }).then(response => {
-            if (response.status.code == 201) {
-                dispatch({type: 'NEW_ORDER', payload: response.entity});
-            }
+            var clientPath = response.entity._links.client.href;
+            var productPath = response.entity._links.product.href;
+
+            rest({
+                method: 'PUT',
+                path: clientPath,
+                entity: clientHref,
+                headers: {'Content-Type': 'text/uri-list'}
+            }).then(response => {
+                rest({
+                    method: 'PUT',
+                    path: productPath,
+                    entity: productHref,
+                    headers: {'Content-Type': 'text/uri-list'}
+                }).then(response => {
+                    dispatch({type: 'NEW_ORDER_FINISHED', payload: {}});
+                });
+            });
+
+
+            dispatch({type: 'NEW_ORDER', payload: response.entity});
         });
     }
 }
-
-export function fetchClient(clientPath) {
-    return (dispatch) => {
-        clientAPI({
-            method: 'GET',
-            path: clientPath,
-            headers: {'Content-Type': 'application/json'}
-        }).then(response => {
-            dispatch({type: 'SET_CLIENT', payload: response.entity});
-        });
-    }
-}
-
-// export function fetchProduct(productPath) {
-//     return (dispatch) => {
-//         clientAPI({
-//             method: 'GET',
-//             path: productPath,
-//             headers: {'Content-Type': 'application/json'}
-//         }).then(response => {
-//             dispatch({type: 'SET_PRODUCT', payload: response.entity});
-//         });
-//     }
-// }
-
-
-export function setError(errorMsg) {
-    return (dispatch)=> {
-        if (errorMsg) {
-            dispatch({type: 'SET_ERROR', payload: errorMsg});
-        }
-        else {
-            dispatch({type: 'SET_ERROR', payload: null});
-        }
-    };
-}
-
-
-
-

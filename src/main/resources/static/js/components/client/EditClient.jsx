@@ -36,18 +36,28 @@ export default class EditDialog extends React.Component {
         var {client, attributes}= this.props;
         const id = client._links.self.href.split('/').pop();
 
-        var inputs = attributes.map(attribute =>
-            <p class="form-group" key={attribute}>
-                <label htmlFor={attribute}>{attribute}</label>
-                <input id={attribute} type="text" placeholder={attribute} ref={attribute}
-                       defaultValue={client[attribute]}
-                       className="field form-control"/>
-            </p>
+        var inputs = attributes.map(attribute => {
+                if (attribute === 'securityNr') {
+                    return <p class="form-group" key={attribute}>
+                        <label htmlFor={attribute}>{attribute}</label>
+                        <input id={attribute} type="text" placeholder={attribute} ref={attribute}
+                               defaultValue={client[attribute]}
+                               className="field form-control" readOnly/>
+                    </p>;
+                }
+                return <p class="form-group" key={attribute}>
+                    <label htmlFor={attribute}>{attribute}</label>
+                    <input id={attribute} type="text" placeholder={attribute} ref={attribute}
+                           defaultValue={client[attribute]}
+                           className="field form-control"/>
+                </p>;
+            }
         );
 
         return (
             <div>
-                <button className="btn btn-sm btn-primary" type="button" data-toggle="modal" data-target={"#myEdit" + id}>
+                <button className="btn btn-sm btn-primary" type="button" data-toggle="modal"
+                        data-target={"#myEdit" + id}>
                     Edit
                 </button>
                 <div id={"myEdit" + id} class="modal fade" role="dialog">
@@ -62,7 +72,8 @@ export default class EditDialog extends React.Component {
                                 {this.props.renderError()}
                                 <form className="form">
                                     {inputs}
-                                    <button className="btn btn-block btn-primary" onClick={this.handleSubmit}>Save</button>
+                                    <button className="btn btn-block btn-primary" onClick={this.handleSubmit}>Save
+                                    </button>
                                 </form>
                             </div>
                         </div>

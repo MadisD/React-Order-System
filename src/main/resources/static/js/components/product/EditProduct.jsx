@@ -36,14 +36,34 @@ export default class EditDialog extends React.Component {
         var {product, attributes}= this.props;
         const id = product._links.self.href.split('/').pop();
 
-        var inputs = attributes.map(attribute =>
-            <p class="form-group" key={attribute}>
+        var inputs = attributes.map(attribute => {
+
+            if (attribute === 'barcode') {
+                return <p class="form-group" key={attribute}>
+                    <label htmlFor={attribute}>{attribute}</label>
+                    <input id={attribute} type="text" placeholder={attribute} ref={attribute}
+                           defaultValue={product[attribute]}
+                           className="field form-control" readOnly/>
+                </p>;
+            }
+            else if (attribute === 'releaseDate') {
+                return <p class="form-group" key={attribute}>
+                    <label htmlFor={attribute}>{attribute}</label>
+                    <input id={attribute} type="date" placeholder={attribute} ref={attribute}
+                           defaultValue={product[attribute]}
+                           className="field form-control" />
+                </p>;
+            }
+            return <p class="form-group" key={attribute}>
                 <label htmlFor={attribute}>{attribute}</label>
                 <input id={attribute} type="text" placeholder={attribute} ref={attribute}
                        defaultValue={product[attribute]}
                        className="field form-control"/>
-            </p>
-        );
+            </p>;
+
+
+
+        });
 
         return (
             <div>

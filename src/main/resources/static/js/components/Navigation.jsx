@@ -8,8 +8,10 @@ export default class Navigation extends React.Component {
         const clientClass = location.pathname === "/^\/clients/" ? "active" : "";
         const productClass = location.pathname.match(/^\/products/) ? "active" : "";
         const orderClass = location.pathname.match(/^\/orders/) ? "active" : "";
+        const createClass = location.pathname.match(/^\/create/) ? "active" : "";
         return (
             <ul class="nav nav-tabs">
+                <li role="presentation" className={createClass}><Link to='/create'>New Order</Link></li>
                 <li role="presentation" className={clientClass}><Link to='/clients'>Clients</Link></li>
                 <li role="presentation" className={productClass}><Link to='/products'>Products</Link></li>
                 <li role="presentation" className={orderClass}><Link to='/orders'>Orders</Link></li>

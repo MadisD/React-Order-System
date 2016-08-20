@@ -2,7 +2,7 @@ package hello;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.sql.Date;
 
 @Entity(name = "products")
 public class Product {
@@ -10,13 +10,15 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long product_id;
 
+    @Column(updatable=false)
     private int barcode;
     private String name;
     private BigDecimal price;
     private String description;
 
     @Column(name = "release_date")
-    private Timestamp releaseDate;
+    private Date releaseDate;
+
 
     public int getBarcode() {
         return barcode;
@@ -42,14 +44,6 @@ public class Product {
         this.description = description;
     }
 
-    public Timestamp getReleaseDate() {
-        return releaseDate;
-    }
-
-    public void setReleaseDate(Timestamp releaseDate) {
-        this.releaseDate = releaseDate;
-    }
-
     public BigDecimal getPrice() {
         return price;
     }
@@ -64,5 +58,13 @@ public class Product {
 
     public void setProduct_id(long product_id) {
         this.product_id = product_id;
+    }
+
+    public Date getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(Date releaseDate) {
+        this.releaseDate = releaseDate;
     }
 }

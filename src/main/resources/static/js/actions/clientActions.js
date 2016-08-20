@@ -26,6 +26,17 @@ export function loadClientsInfo() {
     }
 }
 
+export function fetchClients() {
+    return (dispatch) => {
+        clientAPI({
+            method: 'GET',
+            path: root + 'clients',
+        }).then(response => {
+            dispatch({type: 'LOAD_CLIENTS_FINISHED', payload: response.entity._embedded.clients});
+        });
+    }
+}
+
 export function createClient(client) {
     return (dispatch) => {
         clientAPI({

@@ -8,7 +8,7 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long client_id;
 
-    @Column(name = "security_nr")
+    @Column(name = "security_nr", updatable=false)
     private long securityNr;
 
     @Column(name = "first_name")

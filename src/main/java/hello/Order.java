@@ -15,7 +15,8 @@ public class Order {
     @Column(name = "product_price")
     private BigDecimal productPrice;
 
-    @Column(name = "transaction_date")
+    @Column(name = "transaction_date", updatable=false, insertable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+//    @Column(name = "transaction_date", updatable=false, insertable=false)
     private Timestamp transactionDate;
 
     @OneToOne()

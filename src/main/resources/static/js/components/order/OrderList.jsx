@@ -1,14 +1,12 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import Order from './Order';
-import {loadOrdersInfo} from '../../actions/orderActions'
+import {loadOrdersInfo} from '../../actions/orderActions';
 
 @connect((store) => {
     return {
         orders: store.orders.orders,
-        attributes: store.orders.orderAttributes,
         error: store.orders.error,
-        client: store.orders.client,
     };
 })
 export default class OrderList extends React.Component {
@@ -64,18 +62,10 @@ export default class OrderList extends React.Component {
                             <th/>
                             <th/>
                         </tr>
-
-
                         {orders}
                         </tbody>
                     </table>
                 </div>
-                {/*<CreateDialog*/}
-                    {/*attributes={this.props.attributes}*/}
-                    {/*dispatch={this.props.dispatch}*/}
-                    {/*validateInput={this.validateInput}*/}
-                    {/*renderError={this.renderError}*/}
-                {/*/>*/}
             </div>
         )
     }

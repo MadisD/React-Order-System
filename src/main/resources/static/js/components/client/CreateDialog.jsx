@@ -12,7 +12,7 @@ export default class CreateDialog extends React.Component {
     handleSubmit(e) {
         e.preventDefault();
         var newClient = {};
-        var {attributes,dispatch}= this.props;
+        var {attributes, dispatch}= this.props;
 
         var attribute = '';
         for (attribute of attributes) {
@@ -35,12 +35,34 @@ export default class CreateDialog extends React.Component {
         $("#myModal").modal("hide");
     }
 
-    render() {
-        var inputs = this.props.attributes.map(attribute =>
-            <p className="form-group" key={attribute}>
-                <input type="text" placeholder={attribute} ref={attribute} className="field form-control"/>
-            </p>
+
+    renderCountries(){
+        var countryOptions = this.props.countries.map(country =>
+            <option key={country.name} value={country.name}>
+                {country.name}
+            </option>
         );
+        return <p className="form-group" key="country">
+            <select defaultValue="" class="form-control" ref="country" id="countrySelect">
+                <option value= "" disabled hidden>Select country</option>
+                {countryOptions}
+            </select>
+        </p>;
+    }
+
+
+    render() {
+        var inputs = this.props.attributes.map(attribute => {
+                if (attribute === 'country') {
+                    return this.renderCountries();
+                }
+
+                return <p className="form-group" key={attribute}>
+                    <input type="text" placeholder={attribute} ref={attribute} className="field form-control"/>
+                </p>;
+            }
+        );
+
         return (
             <div>
                 <button type="button" class="btn btn-success " data-toggle="modal" data-target="#myModal">
@@ -58,7 +80,8 @@ export default class CreateDialog extends React.Component {
                                 {this.props.renderError()}
                                 <form>
                                     {inputs}
-                                    <button className="btn btn-block btn-primary" onClick={this.handleSubmit}>Create</button>
+                                    <button className="btn btn-block btn-primary" onClick={this.handleSubmit}>Create
+                                    </button>
                                 </form>
                             </div>
                         </div>

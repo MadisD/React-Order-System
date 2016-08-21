@@ -56,6 +56,7 @@ export default class OrderList extends React.Component {
                         <tr>
                             <th>Order ID</th>
                             <th>Price</th>
+                            <th>Currency</th>
                             <th>Transaction date</th>
                             <th>Client name</th>
                             <th>Product name</th>

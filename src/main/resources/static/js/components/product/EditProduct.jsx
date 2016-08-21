@@ -39,20 +39,29 @@ export default class EditDialog extends React.Component {
         var inputs = attributes.map(attribute => {
 
             if (attribute === 'barcode') {
-                return <p class="form-group" key={attribute}>
+                return <div class="form-group" key={attribute}>
                     <label htmlFor={attribute}>{attribute}</label>
                     <input id={attribute} type="text" placeholder={attribute} ref={attribute}
                            defaultValue={product[attribute]}
                            className="field form-control" readOnly/>
-                </p>;
+                </div>;
             }
             else if (attribute === 'releaseDate') {
-                return <p class="form-group" key={attribute}>
+                return <div class="form-group" key={attribute}>
                     <label htmlFor={attribute}>{attribute}</label>
                     <input id={attribute} type="date" placeholder={attribute} ref={attribute}
                            defaultValue={product[attribute]}
                            className="field form-control" />
-                </p>;
+                </div>;
+            }
+            else if (attribute === 'price') {
+                return <div className="form-group" key={attribute}>
+                    <div className="input-group">
+                        <input type="number" placeholder={attribute}  ref={attribute}
+                               defaultValue={product[attribute]} className="field form-control"/>
+                        <div class="input-group-addon">€</div>
+                    </div>
+                </div>;
             }
             return <p class="form-group" key={attribute}>
                 <label htmlFor={attribute}>{attribute}</label>

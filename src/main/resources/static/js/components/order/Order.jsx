@@ -67,11 +67,15 @@ export default class Order extends React.Component {
         const id = order._links.self.href.split('/').pop();
         const name = client.firstName + ' ' + client.lastName;
 
+        var timestamp = order.transactionDate;
+        var date = new Date(timestamp).toLocaleString('et-EE', {hour12: false});
+
         return (
             <tr>
                 <td>{id}</td>
                 <td>{order.productPrice}</td>
-                <td>{order.transactionDate}</td>
+                <td>{order.currency}</td>
+                <td>{date}</td>
                 <td>{name}</td>
                 <td>{product.name}</td>
                 <td>

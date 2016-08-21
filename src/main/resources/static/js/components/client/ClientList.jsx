@@ -3,11 +3,13 @@ import {connect} from 'react-redux';
 import Client from './Client';
 import CreateDialog from './CreateDialog';
 import {loadClientsInfo} from '../../actions/clientActions'
+import {loadCountries} from '../../actions/countryActions'
 
 @connect((store) => {
     return {
         clients: store.clients.clients,
         attributes: store.clients.clientAttributes,
+        countries: store.countries.countries,
         error: store.clients.error
     };
 })
@@ -21,6 +23,7 @@ export default class ClientList extends React.Component {
 
     componentWillMount() {
         this.props.dispatch(loadClientsInfo());
+        this.props.dispatch(loadCountries());
     }
 
     renderError() {
@@ -76,6 +79,7 @@ export default class ClientList extends React.Component {
                     dispatch={this.props.dispatch}
                     validateInput={this.validateInput}
                     renderError={this.renderError}
+                    countries={this.props.countries}
                 />
             </div>
         )

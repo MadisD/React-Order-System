@@ -39,14 +39,21 @@ export default class CreateDialog extends React.Component {
         var inputs = this.props.attributes.map(attribute => {
 
             if (attribute === 'releaseDate') {
-                return <p className="form-group" key={attribute}>
+                return <div className="form-group" key={attribute}>
                     <input type="date" placeholder={attribute} ref={attribute} className="field form-control"/>
-                </p>;
+                </div>;
+            }else if (attribute === 'price') {
+                return <div className="form-group" key={attribute}>
+                    <div className="input-group">
+                        <input type="number" placeholder={attribute} ref={attribute} className="field form-control"/>
+                        <div class="input-group-addon">€</div>
+                    </div>
+                </div>;
             }
             return (
-                <p className="form-group" key={attribute}>
+                <div className="form-group" key={attribute}>
                     <input type="text" placeholder={attribute} ref={attribute} className="field form-control"/>
-                </p>)
+                </div>)
                 ;
 
         });

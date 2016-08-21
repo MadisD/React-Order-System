@@ -32,6 +32,21 @@ export default class EditDialog extends React.Component {
         $("#myEdit" + id).modal("hide");
     }
 
+    renderCountries(){
+        var countryOptions = this.props.countries.map(country =>
+            <option key={country.name} value={country.name}>
+                {country.name}
+            </option>
+        );
+        return <p className="form-group" key="country">
+            <label for="countrySelect">Country</label>
+            <select defaultValue={this.props.client.country} class="form-control" ref="country" id="countrySelect">
+                {countryOptions}
+            </select>
+        </p>;
+    }
+
+
     render() {
         var {client, attributes}= this.props;
         const id = client._links.self.href.split('/').pop();
@@ -44,6 +59,9 @@ export default class EditDialog extends React.Component {
                                defaultValue={client[attribute]}
                                className="field form-control" readOnly/>
                     </p>;
+                }
+                else if (attribute === 'country') {
+                    return this.renderCountries();
                 }
                 return <p class="form-group" key={attribute}>
                     <label htmlFor={attribute}>{attribute}</label>

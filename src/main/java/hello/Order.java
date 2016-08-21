@@ -19,6 +19,9 @@ public class Order {
 //    @Column(name = "transaction_date", updatable=false, insertable=false)
     private Timestamp transactionDate;
 
+    @Column(updatable=false, columnDefinition="VARCHAR(255) DEFAULT 'EUR'")
+    private String currency;
+
     @OneToOne()
     @JoinColumn(name = "client_id")
     private Client client;
@@ -66,5 +69,13 @@ public class Order {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 }

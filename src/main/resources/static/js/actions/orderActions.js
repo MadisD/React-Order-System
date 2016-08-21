@@ -16,13 +16,14 @@ export function loadOrdersInfo() {
     }
 }
 
-export function createOrder(productPrice, clientHref, productHref) {
+export function createOrder(productPrice, currency, clientHref, productHref) {
     return (dispatch) => {
         clientAPI({
             method: 'POST',
             path: root+ destination,
             entity: {
                 productPrice: productPrice,
+                currency: currency,
             },
             headers: {'Content-Type': 'application/json'}
         }).then(response => {

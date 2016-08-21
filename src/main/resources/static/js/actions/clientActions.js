@@ -9,7 +9,7 @@ export function loadClientsInfo() {
     return (dispatch) => {
         clientAPI({
             method: 'GET',
-            path: root + 'clients',
+            path: root + 'clients?size=50',
         }).then(response => {
             dispatch({type: 'LOAD_CLIENTS_FINISHED', payload: response.entity._embedded.clients});
             clientAPI({
@@ -30,7 +30,7 @@ export function fetchClients() {
     return (dispatch) => {
         clientAPI({
             method: 'GET',
-            path: root + 'clients',
+            path: root + 'clients?size=50',
         }).then(response => {
             dispatch({type: 'LOAD_CLIENTS_FINISHED', payload: response.entity._embedded.clients});
         });

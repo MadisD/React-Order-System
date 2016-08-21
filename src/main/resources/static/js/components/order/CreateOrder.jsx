@@ -4,12 +4,18 @@ import {connect} from 'react-redux';
 import {fetchClients} from '../../actions/clientActions'
 import {fetchProducts} from '../../actions/productActions'
 import {createOrder} from '../../actions/orderActions'
+import {loadCountries} from '../../actions/countryActions'
+import rest from 'rest';
+import mime from 'rest/interceptor/mime';
+const restAPI = rest.wrap(mime);
+
 // import {hashHistory} from 'react-router';
 
 @connect((store) => {
     return {
         clients: store.clients.clients,
         products: store.products.products,
+        countries: store.countries.countries,
         error: store.orders.error,
     };
 })
@@ -22,14 +28,17 @@ export default class CreateOrder extends React.Component {
             client: null,
             product: null,
             clientError: null,
-            productError: null
-        }
+            productError: null,
+            price: null,
+            currency: "EUR"
+        };
+        this.convertPrice = this.convertPrice.bind(this);
+        this.renderOrderPrice = this.renderOrderPrice.bind(this);
     }
 
     handleSubmit(e) {
         e.preventDefault();
 
-        var {dispatch}= this.props;
         var clientRef = $('#clientSelect').val();
         var productRef = $('#productSelect').val();
         var clientError = this.validateInput("Client", clientRef);
@@ -53,8 +62,7 @@ export default class CreateOrder extends React.Component {
         this.setState({client: newClient});
         this.setState({product: newProduct});
 
-        var price = newProduct.price;
-        dispatch(createOrder(price, clientRef, productRef));
+        this.convertPrice(clientRef, productRef);
         // hashHistory.push("/orders");
     }
 
@@ -74,13 +82,16 @@ export default class CreateOrder extends React.Component {
     renderClientDetails() {
         var {client} = this.state;
         if (client) {
-            return <ul>
-                <li>Name: {client.firstName + ' ' + client.lastName}</li>
-                <li>Security number: {client.securityNr}</li>
-                <li>Phone number: {client.phoneNr}</li>
-                <li>Country: {client.country}</li>
-                <li>Address: {client.address}</li>
-            </ul>
+            return <div className="container">
+                <h2>Client Details</h2>
+                <ul>
+                    <li><h4>Name:</h4>{client.firstName + ' ' + client.lastName}</li>
+                    <li><h4>Security number:</h4>{client.securityNr}</li>
+                    <li><h4>Phone number:</h4>{client.phoneNr}</li>
+                    <li><h4>Country:</h4>{client.country}</li>
+                    <li><h4>Address:</h4>{client.address}</li>
+                </ul>
+            </div>
         }
         return null;
     }
@@ -88,16 +99,71 @@ export default class CreateOrder extends React.Component {
     renderProductDetails() {
         var {product} = this.state;
         if (product) {
-            return <ul>
-                <li>Name: {product.name}</li>
-                <li>Price: {product.price}</li>
-                <li>Barcode: {product.barcode}</li>
-                <li>Description: {product.description}</li>
-            </ul>
+            return <div className="container">
+                <h2>Product Details</h2>
+                <ul>
+                    <li><h4>Name:</h4>{product.name}</li>
+                    <li><h4>Price:</h4>{product.price}€</li>
+                    <li><h4>Barcode:</h4>{product.barcode}</li>
+                    <li><h4>Description</h4>{product.description}</li>
+                </ul>
+            </div>
         }
         return null;
     }
 
+    convertPrice(clientRef, productRef) {
+        var {dispatch} = this.props;
+        var {client, product} = this.state;
+        if (client) {
+            var country = _.find(this.props.countries, country => country.name === client.country);
+            var newCurrency = country.currencies[0];
+
+            this.setState({currency: newCurrency}, ()=> {
+                if (product) {
+                    if (this.state.currency === "EUR") {
+                        this.setState({price: product.price}, () => {
+                            dispatch(createOrder(this.state.price, this.state.currency, clientRef, productRef))
+                        });
+                    } else {
+                        restAPI({
+                            method: 'GET',
+                            path: "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.xchange%20where%20pair%20in%20(%22EUR" + this.state.currency + "%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=",
+                        }).then(response => {
+                            if (response.status.code === 200) {
+                                var rate = response.entity.query.results.rate.Rate;
+                                var newPrice = product.price * rate;
+                                var roundedPrice = _.round(newPrice, 2);
+                                this.setState({price: roundedPrice}, () => {
+                                    console.log(roundedPrice, this.state.currency);
+                                    dispatch(createOrder(roundedPrice, this.state.currency, clientRef, productRef))
+                                });
+                            }
+                            else {
+                                this.setState({currency: "EUR"}, () => {
+                                    this.setState({price: product.price}, () => {
+                                        dispatch(createOrder(this.state.price, this.state.currency, clientRef, productRef))
+                                    });
+                                });
+                            }
+                        });
+                    }
+                }
+
+            });
+        }
+    }
+
+
+    renderOrderPrice() {
+        if (this.state.price) {
+            return <div>
+                <h3>Price</h3>
+                <p>{this.state.price + ' ' + this.state.currency}</p>
+            </div>;
+        }
+        return null;
+    }
 
     validateInput(attribute, value) {
         if (!value) {
@@ -106,14 +172,14 @@ export default class CreateOrder extends React.Component {
         return null;
     }
 
-    renderClientError(){
+    renderClientError() {
         if (!this.state.clientError) {
             return null;
         }
         return <div style={{color: 'red'}}>{this.state.clientError}</div>;
     }
 
-    renderProductError(){
+    renderProductError() {
         if (!this.state.productError) {
             return null;
         }
@@ -123,6 +189,7 @@ export default class CreateOrder extends React.Component {
     componentWillMount() {
         this.props.dispatch(fetchClients());
         this.props.dispatch(fetchProducts());
+        this.props.dispatch(loadCountries());
     }
 
     render() {
@@ -141,9 +208,10 @@ export default class CreateOrder extends React.Component {
                 <form>
                     <div class="form-group">
                         <label for="clientSelect">Select client from list</label>
-                        <select defaultValue="1" class="form-control" ref="clientSelect" onChange={this.handleClientDetails.bind(this)}
+                        <select defaultValue="1" class="form-control" ref="clientSelect"
+                                onChange={this.handleClientDetails.bind(this)}
                                 id="clientSelect">
-                            <option value= "1" disabled hidden>Choose client</option>
+                            <option value="1" disabled hidden>Choose client</option>
                             {clientOptions}
                         </select>
                         {this.renderClientError()}
@@ -151,18 +219,25 @@ export default class CreateOrder extends React.Component {
 
                     <div id="product" class="form-group">
                         <label for="productSelect">Select product from list</label>
-                        <select defaultValue="1" class="form-control" ref="productSelect" onChange={this.handleProductDetails.bind(this)}
+                        <select defaultValue="1" class="form-control" ref="productSelect"
+                                onChange={this.handleProductDetails.bind(this)}
                                 id="productSelect">
-                            <option value= "1" disabled hidden>Choose product</option>
+                            <option value="1" disabled hidden>Choose product</option>
                             {productOptions}
                         </select>
                         {this.renderProductError()}
                     </div>
-
-                    <button className="btn btn-success" onClick={this.handleSubmit}>Confirm</button>
                 </form>
-                {this.renderClientDetails()}
-                {this.renderProductDetails()}
+                <div className="container">
+                    <div className="col-sm-6">
+                        {this.renderClientDetails()}
+                    </div>
+                    <div className="col-sm-6">
+                        {this.renderProductDetails()}
+                    </div>
+                </div>
+                {this.renderOrderPrice()}
+                <button className="btn btn-lg btn-block btn-success" onClick={this.handleSubmit}>Confirm order</button>
             </div>
         )
     }

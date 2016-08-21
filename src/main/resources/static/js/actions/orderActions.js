@@ -9,7 +9,17 @@ export function loadOrdersInfo() {
     return (dispatch) => {
         clientAPI({
             method: 'GET',
-            path: root + destination,
+            path: root + destination + '?size=50',
+        }).then(response => {
+            dispatch({type: 'LOAD_ORDERS_FINISHED', payload: response.entity._embedded.orders});
+        });
+    }
+}
+export function loadOrdersBy(argument, direction) {
+    return (dispatch) => {
+        clientAPI({
+            method: 'GET',
+            path: root + destination + '?size=50&sort=' + argument + ',' + direction,
         }).then(response => {
             dispatch({type: 'LOAD_ORDERS_FINISHED', payload: response.entity._embedded.orders});
         });
@@ -20,7 +30,7 @@ export function createOrder(productPrice, currency, clientHref, productHref) {
     return (dispatch) => {
         clientAPI({
             method: 'POST',
-            path: root+ destination,
+            path: root + destination,
             entity: {
                 productPrice: productPrice,
                 currency: currency,

@@ -51,13 +51,14 @@ export default class EditDialog extends React.Component {
                     <label htmlFor={attribute}>{attribute}</label>
                     <input id={attribute} type="date" placeholder={attribute} ref={attribute}
                            defaultValue={product[attribute]}
-                           className="field form-control" />
+                           className="field form-control"/>
                 </div>;
             }
             else if (attribute === 'price') {
                 return <div className="form-group" key={attribute}>
+                    <label htmlFor={attribute}>{attribute}</label>
                     <div className="input-group">
-                        <input type="number" placeholder={attribute}  ref={attribute}
+                        <input type="number" placeholder={attribute} ref={attribute}
                                defaultValue={product[attribute]} className="field form-control"/>
                         <div class="input-group-addon">€</div>
                     </div>
@@ -71,12 +72,12 @@ export default class EditDialog extends React.Component {
             </p>;
 
 
-
         });
 
         return (
             <div>
-                <button className="btn btn-sm btn-primary" type="button" data-toggle="modal" data-target={"#my-product-edit" + id}>
+                <button className="btn btn-sm btn-primary" type="button" data-toggle="modal"
+                        data-target={"#my-product-edit" + id}>
                     Edit
                 </button>
                 <div id={"my-product-edit" + id} class="modal fade" role="dialog">
@@ -91,7 +92,8 @@ export default class EditDialog extends React.Component {
                                 {this.props.renderError()}
                                 <form className="form">
                                     {inputs}
-                                    <button className="btn btn-block btn-primary" onClick={this.handleSubmit}>Save</button>
+                                    <button className="btn btn-block btn-primary" onClick={this.handleSubmit}>Save
+                                    </button>
                                 </form>
                             </div>
                         </div>

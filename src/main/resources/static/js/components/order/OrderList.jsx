@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import Order from './Order';
-import {loadOrdersInfo} from '../../actions/orderActions';
+import {loadOrdersInfo, loadOrdersBy} from '../../actions/orderActions';
 
 @connect((store) => {
     return {
@@ -13,8 +13,20 @@ export default class OrderList extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            sortTypes: {
+                id: 'id',
+                productName: 'product.name',
+                price: 'productPrice',
+                transactionDate: 'transactionDate',
+                clientFirstName: 'client.firstName',
+                clientLastName: 'client.lastName',
+                securityCode: 'client.securityCode',
+            }
+        };
         this.validateInput = this.validateInput.bind(this);
         this.renderError = this.renderError.bind(this);
+        this.handleSort = this.handleSort.bind(this);
     }
 
     componentWillMount() {
@@ -35,6 +47,12 @@ export default class OrderList extends React.Component {
         return null;
     }
 
+    handleSort(e) {
+        var {dispatch} = this.props;
+        var direction = $('input[name="directions"]:checked').val();
+        var sortType = $('#order-type').val();
+        dispatch(loadOrdersBy(sortType, direction));
+    }
 
     render() {
         var orders = this.props.orders.map(
@@ -48,8 +66,34 @@ export default class OrderList extends React.Component {
                 />
         );
 
+        var options = Object.keys(this.state.sortTypes).map(
+            type => {
+                return <option value={this.state.sortTypes[type]} key={type}>{type}</option>;
+            }
+        );
+
         return (
             <div>
+                <div className="form-group">
+                    <h4>Sorted by: </h4>
+                    <select className="form-control" id="order-type" name="order-type" defaultValue="id" onChange={this.handleSort}>
+                        {options}
+                    </select>
+                    <fieldset className="form-group">
+                        <div class="radio">
+                            <label>
+                                <input type="radio" onChange={this.handleSort} name="directions" id="asc" value="asc" defaultChecked/>
+                                Ascending
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" onChange={this.handleSort} name="directions" id="desc" value="desc"/>
+                                Descending
+                            </label>
+                        </div>
+                    </fieldset>
+                </div>
                 <div>
                     <table className="table">
                         <tbody>

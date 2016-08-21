@@ -23,36 +23,6 @@ export default class Order extends React.Component {
         });
     }
 
-    mockEntity() {
-        clientAPI({
-            method: 'POST',
-            path: 'http://localhost:8080/api/orders',
-            entity: {
-                productPrice: 222,
-                transactionDate: "2016-08-18T15:21:45.129+0000",
-            },
-            headers: {'Content-Type': 'application/json'}
-        }).then(response => {
-            var clientPath = response.entity._links.client.href;
-            var productPath = response.entity._links.product.href;
-
-            rest({
-                method: 'PUT',
-                path: clientPath,
-                entity: "http://localhost:8080/api/clients/2",
-                headers: {'Content-Type': 'text/uri-list'}
-            });
-
-            rest({
-                method: 'PUT',
-                path: productPath,
-                entity: "http://localhost:8080/api/products/2",
-                headers: {'Content-Type': 'text/uri-list'}
-            });
-
-        });
-    }
-
     componentWillMount() {
         const clientPath = this.props.order._links.client.href;
         const productPath = this.props.order._links.product.href;

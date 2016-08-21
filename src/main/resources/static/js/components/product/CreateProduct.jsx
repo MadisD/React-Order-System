@@ -40,19 +40,22 @@ export default class CreateDialog extends React.Component {
 
             if (attribute === 'releaseDate') {
                 return <div className="form-group" key={attribute}>
-                    <input type="date" placeholder={attribute} ref={attribute} className="field form-control"/>
+                    <label htmlFor={attribute}>{attribute}</label>
+                    <input type="date" placeholder={attribute} id={attribute} ref={attribute} className="field form-control"/>
                 </div>;
             }else if (attribute === 'price') {
                 return <div className="form-group" key={attribute}>
                     <div className="input-group">
-                        <input type="number" placeholder={attribute} ref={attribute} className="field form-control"/>
+                        <label htmlFor={attribute}>{attribute}</label>
+                        <input type="number" placeholder={attribute} id={attribute} ref={attribute} className="field form-control"/>
                         <div class="input-group-addon">€</div>
                     </div>
                 </div>;
             }
             return (
                 <div className="form-group" key={attribute}>
-                    <input type="text" placeholder={attribute} ref={attribute} className="field form-control"/>
+                    <label htmlFor={attribute}>{attribute}</label>
+                    <input type="text" placeholder={attribute} id={attribute} ref={attribute} className="field form-control"/>
                 </div>)
                 ;
 

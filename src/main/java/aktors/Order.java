@@ -1,4 +1,4 @@
-package hello;
+package aktors;
 
 
 import javax.persistence.*;

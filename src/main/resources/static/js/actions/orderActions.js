@@ -2,7 +2,7 @@ import rest from 'rest';
 import mime from 'rest/interceptor/mime';
 const clientAPI = rest.wrap(mime);
 
-const root = 'http://localhost:8080/api/';
+const root = '/api/';
 const destination = 'orders';
 
 export function loadOrdersInfo() {

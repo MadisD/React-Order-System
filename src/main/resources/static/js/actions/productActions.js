@@ -3,7 +3,7 @@ const _ = require('lodash');
 const mime = require('rest/interceptor/mime');
 const clientAPI = rest.wrap(mime);
 
-const root = 'http://localhost:8080/api/';
+const root = '/api/';
 
 export function loadProductsInfo() {
     return (dispatch) => {

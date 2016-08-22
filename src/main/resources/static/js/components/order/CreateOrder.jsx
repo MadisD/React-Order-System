@@ -34,6 +34,7 @@ export default class CreateOrder extends React.Component {
         };
         this.convertPrice = this.convertPrice.bind(this);
         this.renderOrderPrice = this.renderOrderPrice.bind(this);
+        this.renderForm = this.renderForm.bind(this);
     }
 
     handleSubmit(e) {
@@ -192,7 +193,23 @@ export default class CreateOrder extends React.Component {
         this.props.dispatch(loadCountries());
     }
 
-    render() {
+    renderForm() {
+
+        if (this.props.clients.length === 0) {
+            return (
+                <div>
+                    <h2 style={{color: 'red'}}> No clients to show</h2>
+                </div>
+            );
+        }
+        if (this.props.products.length === 0) {
+            return (
+                <div>
+                    <h2 style={{color: 'red'}}> No products to show</h2>
+                </div>
+            );
+        }
+
         var clientOptions = this.props.clients.map(client =>
             <option key={client._links.self.href} value={client._links.self.href}>
                 {client.firstName + ' ' + client.lastName}
@@ -203,31 +220,39 @@ export default class CreateOrder extends React.Component {
                 {product.name}
             </option>
         );
+
+        return (
+            <form>
+                <div class="form-group">
+                    <label for="clientSelect">Select client from list</label>
+                    <select defaultValue="1" class="form-control" ref="clientSelect"
+                            onChange={this.handleClientDetails.bind(this)}
+                            id="clientSelect">
+                        <option value="1" disabled hidden>Choose client</option>
+                        {clientOptions}
+                    </select>
+                    {this.renderClientError()}
+                </div>
+
+                <div id="product" class="form-group">
+                    <label for="productSelect">Select product from list</label>
+                    <select defaultValue="1" class="form-control" ref="productSelect"
+                            onChange={this.handleProductDetails.bind(this)}
+                            id="productSelect">
+                        <option value="1" disabled hidden>Choose product</option>
+                        {productOptions}
+                    </select>
+                    {this.renderProductError()}
+                </div>
+                <button className="btn btn-lg btn-block btn-success" onClick={this.handleSubmit}>Confirm order</button>
+            </form>
+        );
+    }
+
+    render() {
         return (
             <div>
-                <form>
-                    <div class="form-group">
-                        <label for="clientSelect">Select client from list</label>
-                        <select defaultValue="1" class="form-control" ref="clientSelect"
-                                onChange={this.handleClientDetails.bind(this)}
-                                id="clientSelect">
-                            <option value="1" disabled hidden>Choose client</option>
-                            {clientOptions}
-                        </select>
-                        {this.renderClientError()}
-                    </div>
-
-                    <div id="product" class="form-group">
-                        <label for="productSelect">Select product from list</label>
-                        <select defaultValue="1" class="form-control" ref="productSelect"
-                                onChange={this.handleProductDetails.bind(this)}
-                                id="productSelect">
-                            <option value="1" disabled hidden>Choose product</option>
-                            {productOptions}
-                        </select>
-                        {this.renderProductError()}
-                    </div>
-                </form>
+                {this.renderForm()}
                 <div className="container">
                     <div className="col-sm-6">
                         {this.renderClientDetails()}
@@ -237,7 +262,6 @@ export default class CreateOrder extends React.Component {
                     </div>
                 </div>
                 {this.renderOrderPrice()}
-                <button className="btn btn-lg btn-block btn-success" onClick={this.handleSubmit}>Confirm order</button>
             </div>
         )
     }

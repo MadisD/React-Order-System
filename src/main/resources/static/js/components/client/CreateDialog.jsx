@@ -53,12 +53,13 @@ export default class CreateDialog extends React.Component {
 
     render() {
         var inputs = this.props.attributes.map(attribute => {
+            const type = attribute.match(/securityNr/) ? "number" : "text";
                 if (attribute === 'country') {
                     return this.renderCountries();
                 }
 
                 return <p className="form-group" key={attribute}>
-                    <input type="text" placeholder={attribute} ref={attribute} className="field form-control"/>
+                    <input type={type} placeholder={attribute} ref={attribute} className="field form-control"/>
                 </p>;
             }
         );

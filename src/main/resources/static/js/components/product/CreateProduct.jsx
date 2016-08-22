@@ -41,21 +41,31 @@ export default class CreateDialog extends React.Component {
             if (attribute === 'releaseDate') {
                 return <div className="form-group" key={attribute}>
                     <label htmlFor={attribute}>{attribute}</label>
-                    <input type="date" placeholder={attribute} id={attribute} ref={attribute} className="field form-control"/>
+                    <input type="date" placeholder={attribute} id={attribute} ref={attribute}
+                           className="field form-control"/>
                 </div>;
-            }else if (attribute === 'price') {
+            } else if (attribute === 'price') {
                 return <div className="form-group" key={attribute}>
+                    <label htmlFor={attribute}>{attribute}</label>
                     <div className="input-group">
-                        <label htmlFor={attribute}>{attribute}</label>
-                        <input type="number" placeholder={attribute} id={attribute} ref={attribute} className="field form-control"/>
+                        <input type="number" placeholder={attribute} id={attribute} ref={attribute}
+                               className="field form-control"/>
                         <div class="input-group-addon">€</div>
                     </div>
+                </div>;
+            }
+            else if (attribute === 'barcode') {
+                return <div className="form-group" key={attribute}>
+                    <label htmlFor={attribute}>{attribute}</label>
+                    <input type="number" placeholder={attribute} id={attribute} ref={attribute}
+                           className="field form-control"/>
                 </div>;
             }
             return (
                 <div className="form-group" key={attribute}>
                     <label htmlFor={attribute}>{attribute}</label>
-                    <input type="text" placeholder={attribute} id={attribute} ref={attribute} className="field form-control"/>
+                    <input type="text" placeholder={attribute} id={attribute} ref={attribute}
+                           className="field form-control"/>
                 </div>)
                 ;
 

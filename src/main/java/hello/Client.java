@@ -1,6 +1,7 @@
 package hello;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 
 @Entity(name = "clients")
 public class Client {
@@ -9,7 +10,9 @@ public class Client {
     private long client_id;
 
     @Column(name = "security_nr", updatable=false)
-    private long securityNr;
+
+    @Pattern(regexp="\\d{11}", message = "Not a valid security number")
+    private String securityNr;
 
     @Column(name = "first_name")
     private String firstName;
@@ -31,14 +34,6 @@ public class Client {
 
     public void setClient_id(long client_id) {
         this.client_id = client_id;
-    }
-
-    public long getSecurityNr() {
-        return securityNr;
-    }
-
-    public void setSecurityNr(long securityNr) {
-        this.securityNr = securityNr;
     }
 
     public String getFirstName() {
@@ -79,5 +74,13 @@ public class Client {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getSecurityNr() {
+        return securityNr;
+    }
+
+    public void setSecurityNr(String securityNr) {
+        this.securityNr = securityNr;
     }
 }

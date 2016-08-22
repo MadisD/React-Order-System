@@ -27,6 +27,7 @@ export default class OrderList extends React.Component {
         this.validateInput = this.validateInput.bind(this);
         this.renderError = this.renderError.bind(this);
         this.handleSort = this.handleSort.bind(this);
+        this.renderOrders = this.renderOrders.bind(this);
     }
 
     componentWillMount() {
@@ -54,7 +55,16 @@ export default class OrderList extends React.Component {
         dispatch(loadOrdersBy(sortType, direction));
     }
 
-    render() {
+    renderOrders() {
+
+        if (this.props.orders.length === 0) {
+            return (
+                <div>
+                    <h2 style={{color: 'red'}}> No orders have been made</h2>
+                </div>
+            );
+        }
+
         var orders = this.props.orders.map(
             order =>
                 <Order
@@ -111,6 +121,14 @@ export default class OrderList extends React.Component {
                         </tbody>
                     </table>
                 </div>
+            </div>
+        );
+    }
+
+    render() {
+        return (
+            <div>
+                {this.renderOrders()}
             </div>
         )
     }

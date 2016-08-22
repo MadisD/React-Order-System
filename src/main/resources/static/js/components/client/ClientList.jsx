@@ -37,11 +37,30 @@ export default class ClientList extends React.Component {
         if (!value) {
             return attribute + " cant be empty";
         }
+        if (attribute === 'securityNr') {
+            var re = new RegExp('[0-9]{11}');
+            if (!re.test(value.trim())) {
+                return "Not a valid security number!";
+            }
+        }
+        if (attribute === "firstName" || attribute === "lastName" || attribute === "phoneNr") {
+            if (value.length < 3) {
+                return attribute + " must be longer than 3";
+            }
+        }
         return null;
     }
 
+    renderClientsList() {
 
-    render() {
+        if (this.props.clients.length === 0) {
+            return (
+                <div>
+                    <h2 style={{color: 'red'}}> No clients to show</h2>
+                </div>
+            );
+        }
+
         var clients = this.props.clients.map(
             client =>
                 <Client
@@ -55,25 +74,29 @@ export default class ClientList extends React.Component {
 
         return (
             <div>
-                <div>
-                    <table className="table">
-                        <tbody>
-                        <tr>
-                            <th>First name</th>
-                            <th>Last name</th>
-                            <th>Security number</th>
-                            <th>Phone number</th>
-                            <th>Country</th>
-                            <th>Address</th>
-                            <th/>
-                            <th/>
-                        </tr>
+                <table className="table">
+                    <tbody>
+                    <tr>
+                        <th>First name</th>
+                        <th>Last name</th>
+                        <th>Security number</th>
+                        <th>Phone number</th>
+                        <th>Country</th>
+                        <th>Address</th>
+                        <th/>
+                        <th/>
+                    </tr>
+                    {clients}
+                    </tbody>
+                </table>
+            </div>
+        );
+    }
 
-
-                        {clients}
-                        </tbody>
-                    </table>
-                </div>
+    render() {
+        return (
+            <div>
+                {this.renderClientsList()}
                 <CreateDialog
                     attributes={this.props.attributes}
                     dispatch={this.props.dispatch}

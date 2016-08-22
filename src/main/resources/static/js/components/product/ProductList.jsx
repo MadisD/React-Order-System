@@ -34,10 +34,33 @@ export default class ProductList extends React.Component {
         if (!value) {
             return attribute + " cant be empty";
         }
+        if (attribute === "name") {
+            if (value.length < 3) {
+                return attribute + " must be longer than 3";
+            }
+        }
+        if (attribute === "barcode" || attribute === "price") {
+            if (value < 0) {
+                return attribute + " cannot have a negative value";
+            }
+            if (attribute === "barcode") {
+                var re = new RegExp('^\\d+$');
+                if (!re.test(value.trim())) {
+                    return attribute + " must be an integer";
+                }
+            }
+        }
         return null;
     }
 
-    render() {
+    renderProductList() {
+        if (this.props.products.length === 0) {
+            return (
+                <div>
+                    <h2 style={{color: 'red'}}> No clients to show</h2>
+                </div>
+            );
+        }
 
         var products = this.props.products.map(
             product =>
@@ -52,23 +75,30 @@ export default class ProductList extends React.Component {
 
         return (
             <div>
-                <div>
-                    <table className="table">
-                        <tbody>
-                        <tr>
-                            <th>Name</th>
-                            <th>Price</th>
-                            <th>Barcode</th>
-                            <th>Description</th>
-                            <th>Release date</th>
-                            <th/>
-                            <th/>
-                        </tr>
+                <table className="table">
+                    <tbody>
+                    <tr>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Barcode</th>
+                        <th>Description</th>
+                        <th>Release date</th>
+                        <th/>
+                        <th/>
+                    </tr>
 
-                        {products}
-                        </tbody>
-                    </table>
-                </div>
+                    {products}
+                    </tbody>
+                </table>
+            </div>
+        );
+    }
+
+    render() {
+
+        return (
+            <div>
+                {this.renderProductList()}
                 <CreateProduct
                     attributes={this.props.attributes}
                     dispatch={this.props.dispatch}
@@ -76,6 +106,6 @@ export default class ProductList extends React.Component {
                     renderError={this.renderError}
                 />
             </div>
-    )
+        )
     }
-    }
+}

@@ -28,7 +28,6 @@ export default class Order extends React.Component {
         const productPath = this.props.order._links.product.href;
         this.fetchEntity(clientPath, 'client');
         this.fetchEntity(productPath, 'product');
-        // this.mockEntity();
     }
 
     render() {

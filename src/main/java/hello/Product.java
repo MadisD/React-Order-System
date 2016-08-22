@@ -1,6 +1,7 @@
 package hello;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import java.math.BigDecimal;
 import java.sql.Date;
 
@@ -10,9 +11,11 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long product_id;
 
-    @Column(updatable=false)
+    @Column(updatable = false)
+    @Min(value = 0)
     private int barcode;
     private String name;
+    @Min(value = 0)
     private BigDecimal price;
     private String description;
 

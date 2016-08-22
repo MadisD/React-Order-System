@@ -5,15 +5,15 @@ var loaders = require('./webpack.loaders');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const HOST = process.env.HOST || "0.0.0.0";
-const PORT = process.env.PORT || "8888";
+const PORT = process.env.PORT || "8080";
 
 module.exports = {
     entry: [
-        `webpack-dev-server/client?http://${HOST}:${PORT}`, // WebpackDevServer host and port
-        `webpack/hot/only-dev-server`,
+        // `webpack-dev-server/client?http://${HOST}:${PORT}`, // WebpackDevServer host and port
+        // `webpack/hot/only-dev-server`,
         `./index.jsx` // Your appʼs entry point
     ],
-    devtool: process.env.WEBPACK_DEVTOOL || 'source-map',
+    // devtool: process.env.WEBPACK_DEVTOOL || 'source-map',
     output: {
         path: path.join(__dirname, 'public'),
         filename: 'bundle.js'
@@ -24,26 +24,26 @@ module.exports = {
     module: {
         loaders
     },
-    devServer: {
-        contentBase: "./public",
-        noInfo: true, //  --no-info option
-        hot: true,
-        inline: true,
-        port: PORT,
-        host: HOST,
-        proxy: {
-            '/api/*': {
-                target: 'localhost:8080',
-                secure: false
-            }
-        }
-
-    },
-    plugins: [
-        new webpack.NoErrorsPlugin(),
-        new webpack.HotModuleReplacementPlugin(),
-        new CopyWebpackPlugin([
-            {from: './index.html'}
-        ])
-    ]
+    // devServer: {
+    //     contentBase: "./public",
+    //     noInfo: true, //  --no-info option
+    //     hot: true,
+    //     inline: true,
+    //     port: PORT,
+    //     host: HOST,
+    //     proxy: {
+    //         '/api/*': {
+    //             target: 'localhost:8080',
+    //             secure: false
+    //         }
+    //     }
+    //
+    // },
+    // plugins: [
+    //     new webpack.NoErrorsPlugin(),
+    //     new webpack.HotModuleReplacementPlugin(),
+    //     new CopyWebpackPlugin([
+    //         {from: './index.html'}
+    //     ])
+    // ]
 };

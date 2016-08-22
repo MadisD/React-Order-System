@@ -51,8 +51,6 @@ export function createOrder(productPrice, currency, clientHref, productHref) {
                     path: productPath,
                     entity: productHref,
                     headers: {'Content-Type': 'text/uri-list'}
-                }).then(response => {
-                    dispatch({type: 'NEW_ORDER_FINISHED', payload: {}});
                 });
             });
 

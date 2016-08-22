@@ -16,7 +16,6 @@ const restAPI = rest.wrap(mime);
         clients: store.clients.clients,
         products: store.products.products,
         countries: store.countries.countries,
-        error: store.orders.error,
     };
 })
 export default class CreateOrder extends React.Component {
@@ -35,6 +34,7 @@ export default class CreateOrder extends React.Component {
         this.convertPrice = this.convertPrice.bind(this);
         this.renderOrderPrice = this.renderOrderPrice.bind(this);
         this.renderForm = this.renderForm.bind(this);
+        this.handleNewOrder = this.handleNewOrder.bind(this);
     }
 
     handleSubmit(e) {
@@ -64,7 +64,6 @@ export default class CreateOrder extends React.Component {
         this.setState({product: newProduct});
 
         this.convertPrice(clientRef, productRef);
-        // hashHistory.push("/orders");
     }
 
 
@@ -81,8 +80,8 @@ export default class CreateOrder extends React.Component {
     }
 
     renderClientDetails() {
-        var {client} = this.state;
-        if (client) {
+        var {client, price} = this.state;
+        if (client && !price) {
             return <div className="container">
                 <h2>Client Details</h2>
                 <ul>
@@ -98,8 +97,8 @@ export default class CreateOrder extends React.Component {
     }
 
     renderProductDetails() {
-        var {product} = this.state;
-        if (product) {
+        var {product, price} = this.state;
+        if (product && !price) {
             return <div className="container">
                 <h2>Product Details</h2>
                 <ul>
@@ -136,7 +135,6 @@ export default class CreateOrder extends React.Component {
                                 var newPrice = product.price * rate;
                                 var roundedPrice = _.round(newPrice, 2);
                                 this.setState({price: roundedPrice}, () => {
-                                    console.log(roundedPrice, this.state.currency);
                                     dispatch(createOrder(roundedPrice, this.state.currency, clientRef, productRef))
                                 });
                             }
@@ -159,8 +157,15 @@ export default class CreateOrder extends React.Component {
     renderOrderPrice() {
         if (this.state.price) {
             return <div>
+                <h2 style={{color: 'green'}}>Order created successfully</h2>
                 <h3>Price</h3>
                 <p>{this.state.price + ' ' + this.state.currency}</p>
+                <h3>Client Name</h3>
+                <p>{this.state.client.firstName + ' ' + this.state.client.lastName}</p>
+                <h3>Product Name</h3>
+                <p>{this.state.product.name}</p>
+                <br/>
+                <button id="init-order" className="btn btn-primary" onClick={this.handleNewOrder}>New order</button>
             </div>;
         }
         return null;
@@ -193,6 +198,11 @@ export default class CreateOrder extends React.Component {
         this.props.dispatch(loadCountries());
     }
 
+    handleNewOrder(e){
+        e.preventDefault();
+        this.setState({price: null, client: null, product: null, currency: "EUR"});
+    }
+
     renderForm() {
 
         if (this.props.clients.length === 0) {
@@ -209,6 +219,10 @@ export default class CreateOrder extends React.Component {
                 </div>
             );
         }
+        if (this.state.price) {
+            return null;
+        }
+
 
         var clientOptions = this.props.clients.map(client =>
             <option key={client._links.self.href} value={client._links.self.href}>

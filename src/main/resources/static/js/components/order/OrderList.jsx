@@ -21,7 +21,7 @@ export default class OrderList extends React.Component {
                 transactionDate: 'transactionDate',
                 clientFirstName: 'client.firstName',
                 clientLastName: 'client.lastName',
-                securityCode: 'client.securityCode',
+                securityNr: 'client.securityNr',
             }
         };
         this.validateInput = this.validateInput.bind(this);
@@ -113,6 +113,7 @@ export default class OrderList extends React.Component {
                             <th>Currency</th>
                             <th>Transaction date</th>
                             <th>Client name</th>
+                            <th>Client security number</th>
                             <th>Product name</th>
                             <th/>
                             <th/>

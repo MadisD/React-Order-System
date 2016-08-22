@@ -46,6 +46,7 @@ export default class Order extends React.Component {
                 <td>{order.currency}</td>
                 <td>{date}</td>
                 <td>{name}</td>
+                <td>{client.securityNr}</td>
                 <td>{product.name}</td>
                 <td>
                 </td>

@@ -11,11 +11,15 @@ http://localhost:8080/
   
   
 # 1. Non-functional requirements.
-The application frond-end part should be implemented in ECMAScript 6 and Bootstrap with optional choice of mainstream JavaScript libraries such us AngularJS or React. The backend service layer should be implemented by using Java or Scala based technology stack and have to be runnable in embedded Jetty container.
-The data persistence technology is not important in this context as long as in-memory based solution is used. Keywords you might want to look up at H2, HSQLDB or even Redis.
-In general the emphasis on functional programming techniques in the code are very welcomed, however, it is not mandatory for task completion.
+The application frond-end part should be implemented in ECMAScript 6 and Bootstrap with optional choice of mainstream JavaScript libraries such us AngularJS or React. The backend service layer should be implemented by using Java or Scala based technology stack.  
+
+The data persistence technology is not important in this context as long as in-memory based solution is used. Keywords you might want to look up at H2, HSQLDB or even Redis.  
+
+In general the emphasis on functional programming techniques in the code are very welcomed, however, it is not mandatory for task completion.  
+
 The UX design and visuals are not going to be evaluated within this task.
-The choice of software building and management tool (Maven, Sbt or Gradle) is not important as long as you use one. The main idea is that application is easy to build and run.
+The choice of software building and management tool (Maven, Sbt or Gradle) is not important as long as you use one. The main idea is that application is easy to build and run.  
+
 In general we would be really happy if we could clone your source code from one of the public distributed version control systems (github,  gitlab or bitbucket) then build it with one command and run it with another with no additional work involved.
 
 # 2. Functional requirements.

@@ -1,12 +1,12 @@
 # How to
 
-**Start command**
+**Start command**  
 mvnw spring-boot:run
   
-(windows)
+(windows)  
 mvnw.cmd spring-boot:run
   
-**Available on:**
+**Available on**  
 http://localhost:8080/
   
   
